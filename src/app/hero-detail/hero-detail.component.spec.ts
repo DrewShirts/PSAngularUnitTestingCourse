@@ -1,5 +1,5 @@
 import {Location} from '@angular/common';
-import {ComponentFixture, fakeAsync, flush, flushMicrotasks, TestBed, tick} from "@angular/core/testing";
+import {async, ComponentFixture, fakeAsync, flush, flushMicrotasks, TestBed, tick} from "@angular/core/testing";
 import {FormsModule} from '@angular/forms';
 import {ActivatedRoute} from "@angular/router";
 import {of} from 'rxjs';
@@ -42,9 +42,19 @@ describe('HeroDetailComponent', () => {
     fixture.detectChanges();
 
     fixture.componentInstance.save();
-    // tick(250);
     flush();
 
     expect(mockHeroService.updateHero).toHaveBeenCalled();
   }));
+
+  // it('should call updateHero when save is called', async(() => {
+  //   mockHeroService.updateHero.and.returnValue(of({}));
+  //   fixture.detectChanges();
+
+  //   fixture.componentInstance.save();
+
+  //   fixture.whenStable().then(() => {
+  //     expect(mockHeroService.updateHero).toHaveBeenCalled();
+  //   });
+  // }));
 });
