@@ -1,5 +1,6 @@
 import {Component, Input, NO_ERRORS_SCHEMA} from "@angular/core";
 import {ComponentFixture, TestBed} from "@angular/core/testing"
+import {By} from "@angular/platform-browser";
 import {of} from "rxjs";
 import {HeroService} from "../hero.service";
 import {HeroComponent} from "../hero/hero.component";
@@ -29,12 +30,22 @@ describe('HeroesComponent (deep tests)', () => {
       schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(HeroesComponent);
-    mockHeroService.getHeroes.and.returnValue(of(HEROES));
-    fixture.detectChanges();
   });
 
-  it('should be true', () => {
-    expect(true).toBe(true);
+  it('should render each hero as a HeroComponent', () => {
+    mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+    // run ngOnInit
+    fixture.detectChanges();
+
+    const heroComponentDEs = fixture.debugElement.queryAll(By.directive(HeroComponent));
+    expect(heroComponentDEs.length).toEqual(3);
+    // expect(heroComponentDEs[0].componentInstance.hero.name).toEqual('SpiderDude');
+    // expect(heroComponentDEs[1].componentInstance.hero.name).toEqual('Wonderful Woman');
+    // expect(heroComponentDEs[2].componentInstance.hero.name).toEqual('SuperDude');
+    for (let i=0; i < heroComponentDEs.length; i++) {
+      expect(heroComponentDEs[i].componentInstance.hero).toEqual(HEROES[i]);
+    }
   });
 
 });
