@@ -40,12 +40,23 @@ describe('HeroesComponent (deep tests)', () => {
 
     const heroComponentDEs = fixture.debugElement.queryAll(By.directive(HeroComponent));
     expect(heroComponentDEs.length).toEqual(3);
-    // expect(heroComponentDEs[0].componentInstance.hero.name).toEqual('SpiderDude');
-    // expect(heroComponentDEs[1].componentInstance.hero.name).toEqual('Wonderful Woman');
-    // expect(heroComponentDEs[2].componentInstance.hero.name).toEqual('SuperDude');
     for (let i=0; i < heroComponentDEs.length; i++) {
       expect(heroComponentDEs[i].componentInstance.hero).toEqual(HEROES[i]);
     }
+  });
+
+  it(`should call heroService.deleteHero when the Hero Component's
+    delete button is clicked`, () => {
+      spyOn(fixture.componentInstance, 'delete');
+      mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+      fixture.detectChanges();
+
+      const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+      heroComponents[0].query(By.css('button'))
+        .triggerEventHandler('click', {stopPropagation: () => {}});
+
+      expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
   });
 
 });
