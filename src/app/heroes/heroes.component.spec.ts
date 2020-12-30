@@ -29,7 +29,16 @@ describe(' HeroesComponent', () => {
       expect(component.heroes.length).toBe(2);
       expect(component.heroes[0].id).toBe(1);
       expect(component.heroes[1].id).toBe(2);
-    })
-  })
+    });
+  });
+
+  it('should call deleteHero', () => {
+    mockHeroService.deleteHero.and.returnValue(of(true));
+    component.heroes = HEROES;
+
+    component.delete(HEROES[2]);
+
+    expect(mockHeroService.deleteHero).toHaveBeenCalledWith(HEROES[2]);
+  });
 
 });
